@@ -1,0 +1,11 @@
+{
+    "name": "webarchitect609/bitrix-neverinclude",
+    "description": "Bitrix automatic module including",
+    "authors": [
+        {
+            "name": "Sergey Gripinskiy",
+            "email": "web-architect@mail.ru"
+        }
+    ],
+    "require": {}
+}
