@@ -1,6 +1,5 @@
 <?php
 
-
 namespace WebArch\BitrixNeverInclude;
 
 use Bitrix\Main\Loader;
@@ -28,6 +27,36 @@ class BitrixNeverInclude
                 'CAllIBlock',
                 'CEventIblock',
                 'CRatingsComponentsIBlock',
+            ],
+
+            'catalog' => [
+                'CCatalog',
+                'CExtra',
+                'CPrice',
+                'CGlobalCond',
+            ],
+
+            'sale' => [
+                'CSale',
+                'CBaseSale',
+                'IBXSale',
+                'IPayment',
+                'IShipment',
+                'CAdminSale',
+            ],
+
+            'form' => [
+                'CForm',
+                'CAllForm',
+            ],
+
+            'highloadblock' => [
+                'CUserTypeHlblock',
+                'CIBlockPropertyDirectory',
+            ],
+
+            'idea' => [
+                'CIdeaManagment',
             ],
 
         ];
@@ -114,11 +143,12 @@ class BitrixNeverInclude
     protected function recognizeOldModule($class)
     {
         /*
-         * Если содержит обратный слеш или не начинается с 'C',
+         * Если содержит обратный слеш или не начинается с 'C' или 'I',
          * то это не старый класс из глобальной области
          */
+        $first = substr($class, 0, 1);
         if (
-            strpos($class, 'C') !== 0
+            ($first !== 'C' && $first !== 'I')
             || strpos($class, '\\') !== false
         ) {
             return '';
