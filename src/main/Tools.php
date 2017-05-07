@@ -34,16 +34,32 @@ class Tools
         return $staticProperties['arAutoLoadClasses'];
     }
 
-    public function getClassNameMap(array $autoLoadClasses)
+    /**
+     * Вернуть индекс модуля по имени класса
+     *
+     * @param array $autoLoadClasses
+     *
+     * @return array
+     */
+    public function getModuleByClassNameMapping(array $autoLoadClasses)
     {
         $map = [];
 
         foreach ($autoLoadClasses as $className => $data) {
-            if (!isset($data['module'])) {
+
+            /**
+             * Нас не интересует модуль `main`, т.к. всегда подключён.
+             * Также не интересуют классы не из глобального namespace
+             */
+            if (
+                !isset($data['module'])
+                || 'main' === $data['module']
+                || strpos($className, '\\') !== false
+            ) {
                 continue;
             }
 
-            $map[$data['module']][] = $className;
+            $map[$className] = $data['module'];
         }
 
         return $map;
