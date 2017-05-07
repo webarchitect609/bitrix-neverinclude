@@ -18,7 +18,7 @@ class BitrixNeverInclude
      */
     protected function getModulePrefixMap()
     {
-        //TODO Наполнить карту
+        //TODO Изменить способ определения - определять сразу по имени класса без всяких префиксов, что вычислительно быстрее!в
         return [
 
             'iblock' => [

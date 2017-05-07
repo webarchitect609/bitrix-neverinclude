@@ -1,0 +1,62 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "39efb9be065dcb9f4c99ac16a7b4757a",
+    "content-hash": "2d8a5a094633964b43e5ffafbb49e6e4",
+    "packages": [
+        {
+            "name": "webarchitect609/bitrix-cache",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webarchitect609/bitrix-cache.git",
+                "reference": "f0b4b4b7ad8ac51928b8a437456bb58846224f0a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webarchitect609/bitrix-cache/zipball/f0b4b4b7ad8ac51928b8a437456bb58846224f0a",
+                "reference": "f0b4b4b7ad8ac51928b8a437456bb58846224f0a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WebArch\\BitrixCache\\": "src/main"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergey Gripinskiy",
+                    "email": "web-architect@mail.ru"
+                }
+            ],
+            "description": "Comfortable fluent-interface for Bitrix cache.",
+            "homepage": "https://github.com/webarchitect609/bitrix-cache",
+            "keywords": [
+                "bitrix",
+                "cache"
+            ],
+            "time": "2017-05-07 17:54:51"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.5.0"
+    },
+    "platform-dev": []
+}

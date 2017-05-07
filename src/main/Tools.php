@@ -18,14 +18,34 @@ class Tools
         }
     }
 
-    public function getAllSystemClassNames()
+    /**
+     * Вернуть все маппинги загрузки классов
+     *
+     * @return array
+     */
+    public function getAutoLoadClasses()
     {
-        $this->includeAllInstalledModules();
+        $staticProperties = (new ReflectionClass(Loader::class))->getStaticProperties();
 
-        $loaderClass = new ReflectionClass(Loader::class);
+        if (!isset($staticProperties['arAutoLoadClasses'])) {
+            return [];
+        }
 
-        $arAutoLoadClasses = $loaderClass->getStaticPropertyValue('arAutoLoadClasses');
+        return $staticProperties['arAutoLoadClasses'];
+    }
 
-        return $arAutoLoadClasses;
+    public function getClassNameMap(array $autoLoadClasses)
+    {
+        $map = [];
+
+        foreach ($autoLoadClasses as $className => $data) {
+            if (!isset($data['module'])) {
+                continue;
+            }
+
+            $map[$data['module']][] = $className;
+        }
+
+        return $map;
     }
 }
