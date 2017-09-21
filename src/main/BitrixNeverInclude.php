@@ -14,6 +14,28 @@ class BitrixNeverInclude
     const CACHE_TAG = 'BitrixNeverInclude';
 
     /**
+     * @var string[]
+     */
+    protected static $excludedNamespaces = [
+        //С этим модулем пакет заведомо несовместим
+        'Sprint\Migration',
+    ];
+
+    /**
+     * Установить список игнорируемых namespace
+     *
+     * @param array $namespaces
+     */
+    public static function addExcluded(array $namespaces)
+    {
+        foreach ($namespaces as $namespace) {
+            if (trim($namespace) != '') {
+                self::$excludedNamespaces[] = trim($namespace);
+            }
+        }
+    }
+
+    /**
      * Зарегистрировать автолоадер модулей Битрикс
      * и  **НАВСЕГДА ЗАБЫТЬ** про CModule::IncludeModule и Loader::includeModule
      *
@@ -54,6 +76,10 @@ class BitrixNeverInclude
      */
     protected function autoloadModule($class)
     {
+        if ($this->isExcluded($class)) {
+            return;
+        }
+
         $moduleName = $this->recognizeOldModule($class);
 
         if (!$moduleName) {
@@ -64,9 +90,9 @@ class BitrixNeverInclude
             return;
         }
 
-        Loader::includeModule($moduleName);
-        Loader::autoLoad($class);
-
+        if (Loader::includeModule($moduleName)){
+            Loader::autoLoad($class);
+        }
     }
 
     /**
@@ -129,5 +155,23 @@ class BitrixNeverInclude
         }
 
         return '';
+    }
+
+    /**
+     * Производит проверку, что класс относится к списку исключённых из автолоадинга
+     *
+     * @param $class
+     *
+     * @return bool
+     */
+    private function isExcluded($class)
+    {
+        foreach (self::$excludedNamespaces as $namespace) {
+            if (strpos($class, $namespace) === 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
