@@ -16,7 +16,7 @@ class Tools
         $excludesIndex = array_flip($excludes);
 
         foreach (ModuleManager::getInstalledModules() as $module) {
-            if (isset($excludesIndex[$module])) {
+            if (isset($excludesIndex[$module['ID']])) {
                 continue;
             }
             Loader::includeModule($module['ID']);
