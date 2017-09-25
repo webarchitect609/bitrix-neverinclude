@@ -8,11 +8,11 @@
 
 `composer require webarchitect609/bitrix-neverinclude`
 
-2 Если необходимо, то в init.php укажите список namespace, для которых не следует применять автоматическое подключение модуля:
+2 Если необходимо, то в init.php укажите список модулей, которые следует исключить из обработки данного автолоадера:
 
-`\WebArch\BitrixNeverInclude\BitrixNeverInclude::addExcluded(['Foo\\Bar',]);`
+`\WebArch\BitrixNeverInclude\BitrixNeverInclude::addExcludedModules(['foo.bar',]);`
 
-Сейчас известна несовместимость с модулем 'sprint.migration', поэтому его namespace исключается автоматически.  
+Сейчас известна несовместимость с модулем 'sprint.migration', поэтому он исключается автоматически.  
 
 3 В init.php после подключения `vendor/autoload.php` добавьте вызов: 
 

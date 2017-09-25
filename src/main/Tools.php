@@ -11,9 +11,14 @@ class Tools
     /**
      * Подключить все установленные в системе модули
      */
-    public function includeAllInstalledModules()
+    public function includeAllInstalledModules($excludes = [])
     {
+        $excludesIndex = array_flip($excludes);
+
         foreach (ModuleManager::getInstalledModules() as $module) {
+            if (isset($excludesIndex[$module])) {
+                continue;
+            }
             Loader::includeModule($module['ID']);
         }
     }

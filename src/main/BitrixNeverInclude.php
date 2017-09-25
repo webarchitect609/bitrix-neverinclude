@@ -14,23 +14,22 @@ class BitrixNeverInclude
     const CACHE_TAG = 'BitrixNeverInclude';
 
     /**
-     * @var string[]
+     * @var string[] Список несовместимых модулей
      */
-    protected static $excludedNamespaces = [
-        //С этим модулем пакет заведомо несовместим
-        'Sprint\Migration',
+    protected static $excludedModules = [
+        'sprint.migration',
     ];
 
     /**
-     * Установить список игнорируемых namespace
+     * Добавить исключение модулей из обработки
      *
-     * @param array $namespaces
+     * @param array $modules
      */
-    public static function addExcluded(array $namespaces)
+    public static function addExcludedModules(array $modules)
     {
-        foreach ($namespaces as $namespace) {
-            if (trim($namespace) != '') {
-                self::$excludedNamespaces[] = trim($namespace);
+        foreach ($modules as $module) {
+            if (trim($module) != '') {
+                self::$excludedModules[] = trim($module);
             }
         }
     }
@@ -60,7 +59,7 @@ class BitrixNeverInclude
     {
         $closure = function () {
             $tools = new Tools();
-            $tools->includeAllInstalledModules();
+            $tools->includeAllInstalledModules(self::$excludedModules);
 
             return $tools->getModuleByClassNameMapping($tools->getAutoLoadClasses());
         };
@@ -76,10 +75,6 @@ class BitrixNeverInclude
      */
     protected function autoloadModule($class)
     {
-        if ($this->isExcluded($class)) {
-            return;
-        }
-
         $moduleName = $this->recognizeOldModule($class);
 
         if (!$moduleName) {
@@ -90,7 +85,7 @@ class BitrixNeverInclude
             return;
         }
 
-        if (Loader::includeModule($moduleName)){
+        if (Loader::includeModule($moduleName)) {
             Loader::autoLoad($class);
         }
     }
@@ -155,23 +150,5 @@ class BitrixNeverInclude
         }
 
         return '';
-    }
-
-    /**
-     * Производит проверку, что класс относится к списку исключённых из автолоадинга
-     *
-     * @param $class
-     *
-     * @return bool
-     */
-    private function isExcluded($class)
-    {
-        foreach (self::$excludedNamespaces as $namespace) {
-            if (strpos($class, $namespace) === 0) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
