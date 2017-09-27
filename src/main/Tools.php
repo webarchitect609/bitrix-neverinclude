@@ -11,12 +11,10 @@ class Tools
     /**
      * Подключить все установленные в системе модули
      */
-    public function includeAllInstalledModules($excludes = [])
+    public function includeAllInstalledModules()
     {
-        $excludesIndex = array_flip($excludes);
-
         foreach (ModuleManager::getInstalledModules() as $module) {
-            if (isset($excludesIndex[$module['ID']])) {
+            if (BitrixNeverInclude::isExcludedModule($module['ID'])) {
                 continue;
             }
             Loader::includeModule($module['ID']);

@@ -21,12 +21,18 @@ class BitrixNeverInclude
     ];
 
     /**
+     * @var array Индекс исключаемых модулей для максимально быстрого поиска
+     */
+    protected static $excludedModulesIndex = null;
+
+    /**
      * Добавить исключение модулей из обработки
      *
      * @param array $modules
      */
     public static function addExcludedModules(array $modules)
     {
+        $excludedModulesIndex = null;
         foreach ($modules as $module) {
             if (trim($module) != '') {
                 self::$excludedModules[] = trim($module);
@@ -59,7 +65,7 @@ class BitrixNeverInclude
     {
         $closure = function () {
             $tools = new Tools();
-            $tools->includeAllInstalledModules(self::$excludedModules);
+            $tools->includeAllInstalledModules();
 
             return $tools->getModuleByClassNameMapping($tools->getAutoLoadClasses());
         };
@@ -85,7 +91,7 @@ class BitrixNeverInclude
             return;
         }
 
-        if (Loader::includeModule($moduleName)) {
+        if (!self::isExcludedModule($moduleName) && Loader::includeModule($moduleName)) {
             Loader::autoLoad($class);
         }
     }
@@ -150,5 +156,21 @@ class BitrixNeverInclude
         }
 
         return '';
+    }
+
+    /**
+     * Проверяет, не является ли модуль исключённым
+     *
+     * @param string $moduleName
+     *
+     * @return bool
+     */
+    public static function isExcludedModule($moduleName)
+    {
+        if (is_null(self::$excludedModulesIndex)) {
+            self::$excludedModulesIndex = array_flip(self::$excludedModules);
+        }
+
+        return isset(self::$excludedModulesIndex[$moduleName]);
     }
 }
