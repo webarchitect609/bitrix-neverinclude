@@ -1,6 +1,6 @@
 {
   "name": "webarchitect609/bitrix-neverinclude",
-  "description": "Automatic Bitrix modules loader helps you forget about CModule::IncludeModule and Loader::includeModule FOREVER!",
+  "description": "Automatic Bitrix modules loader helps you forget about CModule::IncludeModule and Loader::includeModule almost FOREVER!",
   "homepage": "https://github.com/webarchitect609/bitrix-neverinclude",
   "keywords": [
     "bitrix",
