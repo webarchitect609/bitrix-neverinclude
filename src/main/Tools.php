@@ -3,13 +3,16 @@
 namespace WebArch\BitrixNeverInclude;
 
 use Bitrix\Main\Loader;
+use Bitrix\Main\LoaderException;
 use Bitrix\Main\ModuleManager;
 use ReflectionClass;
+use ReflectionException;
 
 class Tools
 {
     /**
      * Подключить все установленные в системе модули
+     * @throws LoaderException
      */
     public function includeAllInstalledModules()
     {
@@ -24,6 +27,7 @@ class Tools
     /**
      * Вернуть все маппинги загрузки классов
      *
+     * @throws ReflectionException
      * @return array
      */
     public function getAutoLoadClasses()

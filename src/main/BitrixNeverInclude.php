@@ -3,6 +3,8 @@
 namespace WebArch\BitrixNeverInclude;
 
 use Bitrix\Main\Loader;
+use Bitrix\Main\LoaderException;
+use ReflectionException;
 use RuntimeException;
 use WebArch\BitrixCache\BitrixCache;
 
@@ -16,9 +18,7 @@ class BitrixNeverInclude
     /**
      * @var string[] Список несовместимых модулей
      */
-    protected static $excludedModules = [
-        'sprint.migration',
-    ];
+    protected static $excludedModules = [];
 
     /**
      * @var array Индекс исключаемых модулей для максимально быстрого поиска
@@ -59,9 +59,10 @@ class BitrixNeverInclude
      *
      * Рекомендуется назначить вызов этого метода в конце сброса всего кеша, чтобы при следующем хите он уже был создан.
      *
+     * @throws ReflectionException
      * @return array
      */
-    public static function getClassMapping()
+    public static function getClassMapping(): array
     {
         $closure = function () {
             $tools = new Tools();
@@ -70,16 +71,20 @@ class BitrixNeverInclude
             return $tools->getModuleByClassNameMapping($tools->getAutoLoadClasses());
         };
 
-        return (new BitrixCache())
-            ->withTime(86400)
-            ->withTag(self::CACHE_TAG)
-            ->resultOf($closure);
+        return (new BitrixCache())->setTime(86400)
+                                  ->setTag(self::CACHE_TAG)
+                                  ->callback($closure);
     }
 
     /**
+     * Подключает модуль, определяя его по имени класса.
+     *
      * @param string $class
+     *
+     * @throws LoaderException
+     * @throws ReflectionException
      */
-    protected function autoloadModule($class)
+    protected function autoloadModule(string $class)
     {
         $moduleName = $this->recognizeOldModule($class);
 
@@ -97,13 +102,14 @@ class BitrixNeverInclude
     }
 
     /**
-     * Определение модуля для старых классов из глобальной области
+     * Определение модуля для старых классов из глобальной области.
      *
      * @param string $class
      *
+     * @throws ReflectionException
      * @return string Пустая строка, если не удалось определить имя модуля
      */
-    protected function recognizeOldModule($class)
+    protected function recognizeOldModule(string $class): string
     {
         if (strpos($class, '\\') !== false) {
             return '';
@@ -115,9 +121,10 @@ class BitrixNeverInclude
     /**
      * @param string $class
      *
+     * @throws ReflectionException
      * @return string
      */
-    private function checkClassMapping($class)
+    private function checkClassMapping(string $class): string
     {
         $lowClass = strtolower(trim($class));
 
