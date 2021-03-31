@@ -34,11 +34,13 @@ class Tools
     {
         $staticProperties = (new ReflectionClass(Loader::class))->getStaticProperties();
 
-        if (!isset($staticProperties['arAutoLoadClasses'])) {
-            return [];
+        if (isset($staticProperties['autoLoadClasses'])) {
+            return $staticProperties['autoLoadClasses'];
+        } elseif (isset($staticProperties['arAutoLoadClasses'])) {
+            return $staticProperties['arAutoLoadClasses'];
         }
 
-        return $staticProperties['arAutoLoadClasses'];
+        return [];
     }
 
     /**
