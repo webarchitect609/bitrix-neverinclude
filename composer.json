@@ -16,8 +16,11 @@
     }
   ],
   "require": {
-    "php": "^7.0",
-    "webarchitect609/bitrix-cache": "^1.1"
+    "php": "^7.2 || ^8.0",
+    "webarchitect609/bitrix-cache": "^1.8"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest"
   },
   "autoload": {
     "psr-4": {
