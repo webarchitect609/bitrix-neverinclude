@@ -25,6 +25,7 @@ class BitrixNeverInclude
      */
     protected static $excludedModulesIndex = null;
 
+
     /**
      * Добавить исключение модулей из обработки
      *
@@ -64,16 +65,23 @@ class BitrixNeverInclude
      */
     public static function getClassMapping(): array
     {
-        $closure = function () {
-            $tools = new Tools();
-            $tools->includeAllInstalledModules();
+        static $mapping = null;
 
-            return $tools->getModuleByClassNameMapping($tools->getAutoLoadClasses());
-        };
+        //Для уменьшения запроса кеша.
+        if (is_null($mapping)) {
+            $closure = function () {
+                $tools = new Tools();
+                $tools->includeAllInstalledModules();
 
-        return (new BitrixCache())->setTime(86400)
-                                  ->setTag(self::CACHE_TAG)
-                                  ->callback($closure);
+                return $tools->getModuleByClassNameMapping($tools->getAutoLoadClasses());
+            };
+
+            $mapping = (new BitrixCache())->setTime(86400)
+                                          ->setTag(self::CACHE_TAG)
+                                          ->callback($closure);
+        }
+
+        return $mapping;
     }
 
     /**
